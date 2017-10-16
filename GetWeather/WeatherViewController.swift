@@ -150,8 +150,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //MARK: - Networking
     /***************************************************************/
-    
-    //Write the getWeatherData method here:
     func getWeatherData(url: String, parameters: [String : String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON { (response) in
             if response.result.isSuccess {
@@ -169,9 +167,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //MARK: - JSON Parsing
     /***************************************************************/
-    
-    
-    //Write the updateWeatherData method here:
     func updateWeatherData(data : JSON) {
         if let temperature = data["main"]["temp"].double {
             weatherData.temperature = Int(temperature - 273.15)
@@ -189,9 +184,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //MARK: - UI Updates
     /***************************************************************/
-    
-    
-    //Write the updateUIWithWeatherData method here:
     func updateUIWithWeatherData() {
         cityLabel.text = weatherData.city
         temperatureLabel.text = "\(weatherData.temperature)℃"
@@ -202,9 +194,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
 
     //MARK: - Location Manager Delegate Methods
     /***************************************************************/
-    
-    
-    //Write the didUpdateLocations method here:
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[locations.count - 1]
         if location.horizontalAccuracy > 0 {
@@ -220,8 +209,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         }
     }
     
-    
-    //Write the didFailWithError method here:
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
         cityLabel.text = "Location Unavailable"
@@ -230,9 +217,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //MARK: - Change City Delegate methods
     /***************************************************************/
-    
-    
-    //Write the userEnteredANewCityName Delegate method here:
     func userEnterNewCityName(city: String) {
         SVProgressHUD.show()
         let params : [String : String] = ["q" : city, "appid" : APP_ID]
@@ -240,8 +224,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         SVProgressHUD.dismiss()
     }
     
-    
-    //Write the PrepareForSegue Method here
     func handleSwitch() {
         let switchCityViewController = SwitchCityViewController()
         switchCityViewController.switchCitydelegate = self
