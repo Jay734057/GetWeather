@@ -48,9 +48,12 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         return label
     }()
     
-    let weatherConditionImageView: UIImageView = {
+    lazy var weatherConditionImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
+        
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(updateWeather)))
+        iv.isUserInteractionEnabled = true
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -70,7 +73,31 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         setupView()
         setupLocationManager()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(checkIfNeedToUpdateWeather), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func checkIfNeedToUpdateWeather() {
+        if switchedCity == nil {
+            updateWeather()
+        }
+    }
 
+    func updateWeather() {
+        SVProgressHUD.show()
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -157,7 +184,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
                 self.updateWeatherData(data: weatherJSON)
                 SVProgressHUD.dismiss()
             } else {
-                print("Error \(response.result.error)")
+                print("Error \(response.result.error!)")
                 self.cityLabel.text = "Connection Issues"
                 SVProgressHUD.dismiss()
             }
@@ -217,8 +244,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //MARK: - Change City Delegate methods
     /***************************************************************/
+    var switchedCity: String?
+    
     func userEnterNewCityName(city: String) {
         SVProgressHUD.show()
+        switchedCity = city
         let params : [String : String] = ["q" : city, "appid" : APP_ID]
         getWeatherData(url: WEATHER_URL, parameters: params)
         SVProgressHUD.dismiss()
