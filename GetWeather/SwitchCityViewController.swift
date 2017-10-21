@@ -12,7 +12,7 @@ protocol ChangeCityDelegate {
     func userEnterNewCityName(city : String)
 }
 
-class SwitchCityViewController: UIViewController, UITextFieldDelegate {
+class SwitchCityViewController: UIViewController{
     
     let backgroundImageView: UIImageView = {
         let iv = UIImageView()
@@ -142,6 +142,11 @@ class SwitchCityViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    
+}
+
+
+extension SwitchCityViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleGetWeatherButtonPress()
         return true

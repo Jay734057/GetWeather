@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import SVProgressHUD
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
+class WeatherViewController: UIViewController {
     
     let backgroundImageView: UIImageView = {
         let iv = UIImageView()
@@ -175,6 +175,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         locationManager.startUpdatingLocation()
     }
     
+    
     //MARK: - Networking
     /***************************************************************/
     func getWeatherData(url: String, parameters: [String : String]) {
@@ -204,10 +205,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         } else {
             cityLabel.text = "Weather Unavailable"
         }
-        
-        
     }
-    
     
     //MARK: - UI Updates
     /***************************************************************/
@@ -217,8 +215,18 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         weatherConditionImageView.image = UIImage(named: weatherData.weatherIconName)
         
     }
-    
 
+    var switchedCity: String?
+    
+    func handleSwitch() {
+        let switchCityViewController = SwitchCityViewController()
+        switchCityViewController.switchCitydelegate = self
+        
+        presentFromRight(switchCityViewController)
+    }
+}
+
+extension WeatherViewController : CLLocationManagerDelegate {
     //MARK: - Location Manager Delegate Methods
     /***************************************************************/
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -241,11 +249,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         cityLabel.text = "Location Unavailable"
         SVProgressHUD.dismiss()
     }
-    
+}
+
+extension WeatherViewController : ChangeCityDelegate {
     //MARK: - Change City Delegate methods
     /***************************************************************/
-    var switchedCity: String?
-    
     func userEnterNewCityName(city: String) {
         SVProgressHUD.show()
         switchedCity = city
@@ -253,12 +261,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         getWeatherData(url: WEATHER_URL, parameters: params)
         SVProgressHUD.dismiss()
     }
-    
-    func handleSwitch() {
-        let switchCityViewController = SwitchCityViewController()
-        switchCityViewController.switchCitydelegate = self
-        
-        presentFromRight(switchCityViewController)
-    }
+
 }
 
