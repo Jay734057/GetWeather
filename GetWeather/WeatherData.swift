@@ -33,7 +33,7 @@ class WeatherData {
                 return "sunny"
             case 801...804 :
                 return "cloudy2"
-            case 900...903, 905...1000  :
+            case 900...903, 905...1000 :
                 return "tstorm3"
             case 903 :
                 return "snow5"

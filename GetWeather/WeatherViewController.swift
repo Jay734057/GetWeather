@@ -41,7 +41,6 @@ class WeatherViewController: UIViewController {
     let temperatureLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-//        label.text = "21°"
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 100)
         label.textColor =  UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +59,6 @@ class WeatherViewController: UIViewController {
     
     let cityLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Loading..."
         label.font = UIFont.systemFont(ofSize: 33)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +84,7 @@ class WeatherViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func checkIfNeedToUpdateWeather() {
+    func checkIfNeedToUpdateWeather( _sender: AnyObject) {
         if switchedCity == nil {
             updateWeather()
         }
